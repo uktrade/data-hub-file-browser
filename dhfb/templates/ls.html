@@ -1,0 +1,13 @@
+{% extends 'master.html' %}
+{% block title %}Data Hub File Browser | {{ path }}{% endblock %}
+
+{% block body %}
+<h1>Data Hub File Browser | {{ path }}</h1>
+
+<ul id="list">
+{% for item in contents %}
+<li><a href="{{ item.path }}">{{ item.name }}</a> {{ item.size }}</li>
+{% endfor %}
+</ul>
+
+{% endblock %}
