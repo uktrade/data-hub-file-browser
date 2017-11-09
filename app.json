@@ -1,0 +1,23 @@
+{
+  "name": "data-hub-file-browser",
+  "scripts": {},
+  "env": {
+    "DHFB_AWS_KEY_ID": {
+      "required": true
+    },
+    "DHFB_AWS_SECRET": {
+      "required": true
+    },
+    "DHFB_S3_BUCKET_NAME": {
+      "required": true
+    }
+  },
+  "formation": {},
+  "addons": [],
+  "buildpacks": [
+    {
+      "url": "heroku/python"
+    }
+  ]
+}
+
