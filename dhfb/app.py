@@ -1,9 +1,10 @@
 import os
+import time
 
 import boto3
 
 from flask import Flask, request, session, g, redirect, url_for, abort, \
-     render_template, flash, Response
+     render_template, make_response, flash, Response
 
 from flask_env import MetaFlaskEnv
 
@@ -22,13 +23,30 @@ class Configuration(metaclass=MetaFlaskEnv):
 app.config.from_object(Configuration)
 
 
+def get_s3_client():
+    """Opens a new database connection if there is none yet for the
+    current application context.
+    """
+    def _get_s3_client():
+        s3_client = boto3.client(
+            's3',
+            aws_access_key_id=app.config['AWS_KEY_ID'],
+            aws_secret_access_key=app.config['AWS_SECRET']
+        )
+        return s3_client
+
+    if not hasattr(g, 's3_client'):
+        g.s3_client = _get_s3_client()
+    return g.s3_client
+
+
 def _ls(path):
     """
     renders list of files in a given path (namespace)
     :param path:
     :return: response object of rendered page
     """
-    s3 = boto3.client('s3')
+    s3 = get_s3_client()
 
     if not path:
         original_path = ''
@@ -58,7 +76,7 @@ def _get(path):
     :param path:
     :return: http response object
     """
-    s3 = boto3.client('s3')
+    s3 = get_s3_client()
 
     try:
         s3_response = s3.get_object(Bucket=app.config['S3_BUCKET_NAME'], Key=path)
@@ -66,7 +84,7 @@ def _get(path):
         return _ls(path)
 
     def generate_file(result):
-        for chunk in iter(lambda: result['Body'].read(app.config['CHUNK_SIZE']), b''):
+        for chunk in iter(lambda: result['Body'].read(int(app.config['CHUNK_SIZE'])), b''):
             yield chunk
 
     _, filename = os.path.split(path)
@@ -90,3 +108,22 @@ def index():
     abort(403)
 
 
+@app.route('/check')
+def check():
+    start_time = time.perf_counter()
+
+    try:
+        s3 = get_s3_client()
+        s3_response = s3.list_objects(Bucket=app.config['S3_BUCKET_NAME'], Prefix='', Delimiter='')
+        if 'Contents' in s3_response:
+            status = 'OK'
+        else:
+            status = 'Empty S3'
+    except Exception as e:
+        status = 'S3 error: {}'.format(e)
+
+    totaltime = time.perf_counter() - start_time
+    rendered = render_template('pingdom.xml', status=status, totaltime=totaltime)
+    response = make_response(rendered)
+    response.headers["Content-Type"] = "application/xml"
+    return response
