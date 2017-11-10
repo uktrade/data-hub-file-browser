@@ -1,5 +1,6 @@
 import os
 import time
+from functools import wraps
 
 import boto3
 
@@ -7,6 +8,7 @@ from flask import Flask, request, session, g, redirect, url_for, abort, \
      render_template, make_response, flash, Response
 
 from flask_env import MetaFlaskEnv
+from flask_oauthlib.client import OAuth
 
 
 app = Flask(__name__)
@@ -19,8 +21,78 @@ class Configuration(metaclass=MetaFlaskEnv):
     AWS_SECRET = ''
     S3_BUCKET_NAME = ''
     CHUNK_SIZE = 1024
+    ABC_CLIENT_ID = ''
+    ABC_CLIENT_SECRET = ''
+    ABC_BASE_URL = ''
+    ABC_TOKEN_URL = ''
+    ABC_AUTHORIZE_URL = ''
 
 app.config.from_object(Configuration)
+
+
+oauth = OAuth(app)
+
+abc = oauth.remote_app(
+   'abc',
+   base_url=app.config['ABC_BASE_URL'],
+   request_token_url=None,
+   access_token_url=app.config['ABC_TOKEN_URL'],
+   authorize_url=app.config['ABC_AUTHORIZE_URL'],
+   consumer_key=app.config['ABC_CLIENT_ID'],
+   consumer_secret=app.config['ABC_CLIENT_SECRET'],
+   access_token_method='POST'
+)
+
+
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if 'abc_token' in session:
+            me = abc.get('/api/v1/user/me/')
+            if me.status != 200:
+                return redirect(url_for('login', next=request.url))
+        else:
+            return redirect(url_for('login', next=request.url))
+        return f(*args, **kwargs)
+    return decorated_function
+
+
+@abc.tokengetter
+def get_abc_oauth_token():
+    return session.get('abc_token')
+
+
+@app.route('/login')
+def login():
+    if 'next' in request.args:
+        session['next'] = request.args['next']  # fallback as ABC don't yet understand next
+    return abc.authorize(callback=url_for('authorized', _external=True), next=request.args['next'])
+
+
+@app.route('/logout')
+def logout():
+    session.pop('abc_token', None)
+    return redirect(url_for('index'))
+
+
+@app.route('/login/authorized')
+def authorized():
+    resp = abc.authorized_response()
+    if resp is None or resp.get('access_token') is None:
+        return 'Access denied: reason=%s error=%s resp=%s' % (
+            request.args['error'],
+            request.args['error_description'],
+            resp)
+    session['abc_token'] = (resp['access_token'], '')
+
+    if 'next' in request.args:
+        next_url = request.args['next']
+    elif 'next' in session:
+        next_url = session['next']
+    else:
+        next_url = url_for('index')
+    print(next_url)
+    return redirect(next_url)
 
 
 def get_s3_client():
@@ -94,7 +166,8 @@ def _get(path):
 
 @app.route('/storage/<path:path>')
 @app.route('/storage/')
-def storage_ls(path=None):
+@login_required
+def storage(path=None):
     if path is None:
         return _ls('')
     elif path.endswith('/'):
@@ -104,8 +177,9 @@ def storage_ls(path=None):
 
 
 @app.route('/')
+@login_required
 def index():
-    abort(403)
+    return redirect(url_for('storage'))
 
 
 @app.route('/check')
@@ -127,3 +201,5 @@ def check():
     response = make_response(rendered)
     response.headers["Content-Type"] = "application/xml"
     return response
+
+
