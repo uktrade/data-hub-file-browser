@@ -1,13 +1,23 @@
-{% extends 'master.html' %}
-{% block title %}Data Hub File Browser | {{ path }}{% endblock %}
+{% extends 'govuk_template.html' %}
 
-{% block body %}
-<h1>Data Hub File Browser | {{ path }}</h1>
-
-<ul id="list">
-{% for item in contents %}
-<li><a href="{{ item.path }}">{{ item.name }}</a> {{ item.size }}</li>
-{% endfor %}
-</ul>
-
+{% block inner_content %}
+<div class="container">
+    <h1>folder: {{ path }}</h1>
+    <table id="list">
+      <thead>
+        <tr>
+          <th scope="col">Filename</th>
+          <th class="numeric" scope="col">Filesize</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in contents %}
+            <tr>
+              <th scope="row"><a href="{{ item.path }}">{{ item.name }}</a></th>
+              <td class="numeric">{{ item.size | filesizeformat }}</td>
+            </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+</div>
 {% endblock %}

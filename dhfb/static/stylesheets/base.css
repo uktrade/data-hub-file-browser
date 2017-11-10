@@ -1,0 +1,31 @@
+
+.container {
+    max-width: 960px;
+    margin: 0 15px;
+    font-size: 1.2em;
+}
+
+@media (min-width: 641px) {
+    .container {
+      margin: 0 30px;
+    }
+}
+@media (min-width: 1020px) {
+    .container {
+        margin: 0 auto;
+    }
+}
+
+.secondary-text {
+    color: #6F777B;
+}
+
+
+#content {
+    margin-top: 40px;
+    margin-bottom: 40px;
+}
+
+#list {
+    margin-top: 40px;
+}
