@@ -88,7 +88,7 @@ def authorized():
     if 'next' in request.args:
         next_url = request.args['next']
     elif 'next' in session:
-        next_url = session['next']
+        next_url = session.pop('next', None)
     else:
         next_url = url_for('index')
     print(next_url)
