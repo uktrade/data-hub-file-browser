@@ -6,7 +6,6 @@ certifi==2017.11.5
 chardet==3.0.4
 click==6.7
 decorator==4.1.2
--e git+git@github.com:uktrade/data-hub-file-browser.git@5fac137c820d769fa601f9e282d885735231aa88#egg=dhfb
 docutils==0.14
 Flask==0.12.2
 Flask-Env==1.0.1
