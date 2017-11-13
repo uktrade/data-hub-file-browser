@@ -1,0 +1,5 @@
+---
+applications:
+- name: dhfb
+  memory: 128M
+  command: gunicorn dhfb:app --log-file -
