@@ -1,4 +1,5 @@
 ---
 applications:
-- memory: 128M
+- name: datahub-filebrowser-uat
+  memory: 128M
   instances: 2
