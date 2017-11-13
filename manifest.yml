@@ -1,5 +1,4 @@
 ---
 applications:
-- name: dhfb
-  memory: 128M
-  command: gunicorn dhfb:app --log-file -
+- memory: 128M
+  instances: 2
