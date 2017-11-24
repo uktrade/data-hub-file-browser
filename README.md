@@ -10,6 +10,7 @@
 - ABC_BASE_URL = ''
 - ABC_TOKEN_URL = ''
 - ABC_AUTHORIZE_URL = ''
+- ABC_LOGOUT_URL = ''
 
 ### Optional
 - DHFB_CHUNK_SIZE = 1024

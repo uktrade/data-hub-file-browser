@@ -26,6 +26,7 @@ class Configuration(metaclass=MetaFlaskEnv):
     ABC_BASE_URL = ''
     ABC_TOKEN_URL = ''
     ABC_AUTHORIZE_URL = ''
+    ABC_LOGOUT_URL = ''
 
 app.config.from_object(Configuration)
 
@@ -72,7 +73,7 @@ def login():
 @app.route('/logout')
 def logout():
     session.pop('abc_token', None)
-    return redirect(url_for('index'))
+    return redirect(app.config['ABC_LOGOUT_URL'])
 
 
 @app.route('/login/authorized')
@@ -102,6 +103,7 @@ def get_s3_client():
     def _get_s3_client():
         s3_client = boto3.client(
             's3',
+            use_ssl=True,
             aws_access_key_id=app.config['AWS_KEY_ID'],
             aws_secret_access_key=app.config['AWS_SECRET']
         )
@@ -151,7 +153,8 @@ def _get(path):
     s3 = get_s3_client()
 
     try:
-        s3_response = s3.get_object(Bucket=app.config['S3_BUCKET_NAME'], Key=path)
+        s3_response = s3.get_object(Bucket=app.config['S3_BUCKET_NAME'],
+                                    Key=path)
     except s3.exceptions.NoSuchKey as e:
         return _ls(path)
 
