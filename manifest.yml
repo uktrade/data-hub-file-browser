@@ -1,0 +1,5 @@
+---
+applications:
+- name: staff-sso
+  buildpack: python_buildpack
+  command: gunicorn dhfb:app --log-file -
