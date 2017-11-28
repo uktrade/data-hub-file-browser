@@ -163,8 +163,9 @@ def _get(path):
             yield chunk
 
     _, filename = os.path.split(path)
-    return Response(generate_file(s3_response), mimetype=s3_response['ContentType'],
-                    headers={'Content-Disposition': 'attachment;filename=' + filename})
+    response = Response(generate_file(s3_response), mimetype=s3_response['ContentType'])
+    response.headers.add('Content-Disposition', 'attachment', filename=filename)
+    return response
 
 
 @app.route('/storage/<path:path>')
