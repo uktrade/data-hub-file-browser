@@ -137,9 +137,9 @@ def _ls(path):
             'size': x['Size'],
             'path': '/storage/'+x['Key']
         }, s3_response['Contents'])
-        return render_template('ls.html', path=original_path, contents=ls_dict)
+        return render_template('ls.html', path=original_path, contents=ls_dict, backurl=app.config['DHFB_ABC_LOGOUT_URL'])
     else:
-        return render_template('ls_empty.html', path=original_path)
+        return render_template('ls_empty.html', path=original_path, backurl=app.config['DHFB_ABC_LOGOUT_URL'])
 
 
 def _get(path):

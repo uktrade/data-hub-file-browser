@@ -1,15 +1,15 @@
 {% extends 'base.html' %}
 
-{% block page_title %}GOV.UK – DIT system access{% endblock %}
+{% block page_title %}Data Hub File Browser – DIT system access{% endblock %}
 
 {% block head %}
   {{ super() }}
-  <link href=""{{ url_for('static', filename='stylesheets/base.css') }}"" media="screen" rel="stylesheet" />
+  <link href="{{ url_for('static', filename='stylesheets/base.css') }}" media="screen" rel="stylesheet" />
 {% endblock %}
 
 {% block cookie_message %}
   <p>
-    GOV.UK uses cookies to make the site simpler.
+    Data Hub File Browser uses cookies to make the site simpler.
     <a href="https://www.gov.uk/help/cookies">
       Find out more about cookies
     </a>
@@ -20,10 +20,8 @@
 {% block proposition_header %}
   <div class="header-proposition">
     <div class="content">
-      <nav id="proposition-menu">
-        <a href="/" id="proposition-name">
+      <nav id="proposition-name">
           {% block proposition %}Data Hub File Browser{% endblock %}
-        </a>
       </nav>
     </div>
   </div>
@@ -34,13 +32,6 @@
     {% block inner_content %}{% endblock %}
   </main>
 {% endblock %}
-
-{% block licence_message %}
-  <p>
-    All content is available under the <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" rel="license">Open Government Licence v3.0</a>, except where otherwise stated
-  </p>
-{% endblock %}
-
 
 {% block body_end %}
   <script src=""{{ url_for('static', filename='') }}""></script>

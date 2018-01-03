@@ -4,7 +4,7 @@
 <!--[if gt IE 8]><!--><html lang="en"><!--<![endif]-->
   <head>
     <meta charset="utf-8" />
-    <title>GOV.UK - Data Hub File Browser</title>
+    <title>Data Hub File Browser</title>
 
     <!--[if gt IE 8]><!--><link href="{{ url_for('static', filename='stylesheets/govuk-template.css') }}" media="screen" rel="stylesheet" /><!--<![endif]-->
     <!--[if IE 6]><link href="{{ url_for('static', filename='stylesheets/govuk-template-ie6.css') }}" media="screen" rel="stylesheet" /><![endif]-->
@@ -80,13 +80,6 @@
           <div class="footer-meta-inner">
             {% block footer_support_links %}{% endblock %}
 
-            <div class="open-government-licence">
-              <p class="logo"><a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" rel="license">Open Government Licence</a></p>
-              
-                {% block licence_message %}<p>All content is available under the <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" rel="license">Open Government Licence v3.0</a>, except where otherwise stated</p>{% endblock %}
-              
-            </div>
-          </div>
 
           <div class="copyright">
             <a href="https://www.nationalarchives.gov.uk/information-management/re-using-public-sector-information/copyright-and-re-use/crown-copyright/">'&copy; Crown copyright</a>
