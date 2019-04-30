@@ -7,7 +7,7 @@ chardet==3.0.4
 click==6.7
 decorator==4.1.2
 docutils==0.14
-Flask==0.12.2
+Flask==0.12.4
 Flask-Env==1.0.1
 Flask-OAuthlib==0.9.4
 gunicorn==19.7.1
@@ -16,7 +16,7 @@ ipython==6.2.1
 ipython-genutils==0.2.0
 itsdangerous==0.24
 jedi==0.11.0
-Jinja2==2.10
+Jinja2==2.10.1
 jmespath==0.9.3
 MarkupSafe==1.0
 oauthlib==2.0.6
@@ -27,12 +27,13 @@ prompt-toolkit==1.0.15
 ptyprocess==0.5.2
 Pygments==2.2.0
 python-dateutil==2.6.1
-requests==2.18.4
+requests==2.20.0
 requests-oauthlib==0.8.0
 s3transfer==0.1.11
 simplegeneric==0.8.1
 six==1.11.0
 traitlets==4.3.2
-urllib3==1.22
+urllib3==1.24.2
 wcwidth==0.1.7
 Werkzeug==0.12.2
+-e git://github.com/uktrade/flask-authbroker-client#egg=authbroker_client
