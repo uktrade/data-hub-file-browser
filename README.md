@@ -1,5 +1,24 @@
 # data-hub-file-browser
 
+## Running in Docker
+
+Linting and application testing can be performed in Docker.
+
+### Setting up
+
+Build the Docker image for docker-compose to use.
+
+```bash
+$ docker-compose -f docker-compose.test.yml build
+```
+
+### Running tests
+
+```bash
+$ docker-compose -f docker-compose.test.yml run app ./test.sh
+```
+
+This will first of all run the Flake8 linter, then the app tests.
 
 ## Environment Variables supported
 - DHFB_AWS_KEY_ID = ''
