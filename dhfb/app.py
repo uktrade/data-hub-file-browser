@@ -134,6 +134,7 @@ def _get(path):
 @app.route('/storage/')
 @login_required
 def storage(path=None):
+    """Main route: handles list page and download requests."""
     if path is None:
         return _ls('')
     elif path.endswith('/'):
@@ -145,11 +146,13 @@ def storage(path=None):
 @app.route('/')
 @login_required
 def index():
+    """Convenience redirect route."""
     return redirect(url_for('storage'))
 
 
 @app.route('/check')
 def check():
+    """App healthcheck URL"""
     start_time = time.perf_counter()
 
     try:
