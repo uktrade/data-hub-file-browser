@@ -1,6 +1,7 @@
 import pytest
 
 
+@pytest.mark.usefixtures('nologin')
 @pytest.mark.parametrize(
     ('url', 'listed_filename'),
     (
@@ -14,7 +15,7 @@ import pytest
             ),
     )
 )
-def test_list_view_renders(client, monkeypatch, url, listed_filename):
+def test_list_view_renders(client, url, listed_filename):
     """
     Test that the list views render as expected.
 
@@ -22,10 +23,6 @@ def test_list_view_renders(client, monkeypatch, url, listed_filename):
     contents of the Production S3 bucket. Less assumptive
     tests will replace these shortly.  # TODO
     """
-    monkeypatch.setattr(
-        'authbroker_client.is_authenticated',
-        lambda: True,
-    )
     response = client.get(url)
 
     assert response.status_code == 200
@@ -33,7 +30,8 @@ def test_list_view_renders(client, monkeypatch, url, listed_filename):
     assert listed_filename in response.data
 
 
-def test_content_object_attachment_downloads(client, monkeypatch):
+@pytest.mark.usefixtures('nologin')
+def test_content_object_attachment_downloads(client):
     """
     Test that a file downloads correctly.
 
@@ -41,10 +39,6 @@ def test_content_object_attachment_downloads(client, monkeypatch):
     contents of the Production S3 bucket. Less assumptive
     tests will replace these shortly.  # TODO
     """
-    monkeypatch.setattr(
-        'authbroker_client.is_authenticated',
-        lambda: True,
-    )
     response = client.get('/storage/kbarticle/Forms/AllItems.aspx')
 
     assert response.status_code == 200
@@ -54,6 +48,3 @@ def test_content_object_attachment_downloads(client, monkeypatch):
             ('Content-Disposition', 'attachment; filename=AllItems.aspx'),
     ):
         assert response.headers[header] == value, f'{header} != {value}'
-
-
-# TODO: Set the 'authenticated' status as a pytest fixture
