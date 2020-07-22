@@ -1,0 +1,8 @@
+##
+# Copy this file to `envfile` and include appropriate values for the below.
+#
+# Used by docker-compose.test.yml.
+##
+DHFB_AWS_KEY_ID=SOME_AWS_ACCESS_KEY_ID
+DHFB_AWS_SECRET=SOME_AWS_SECRET_ACCESS_KEY
+DHFB_S3_BUCKET_NAME=SOME_AWS_S3_BUCKET_NAME

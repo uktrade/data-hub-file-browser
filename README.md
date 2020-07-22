@@ -6,7 +6,10 @@ Linting and application testing can be performed in Docker.
 
 ### Setting up
 
-Build the Docker image for docker-compose to use.
+1. Create environment variables file by copying the file `envfile.sample`
+   to `envfile` and filling in the appropriate AWS credentials.
+
+2. Build the Docker image for docker-compose to use.
 
 ```bash
 $ docker-compose -f docker-compose.test.yml build
